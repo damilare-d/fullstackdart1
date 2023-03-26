@@ -29,12 +29,13 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  late final WebSocketChannel channel;
+  late WebSocketChannel channel;
 
   @override
   void initState() {
-    final channel = WebSocketChannel.connect(
-      Uri.parse('wss://localhost:8080/ws'),
+    super.initState();
+    channel = WebSocketChannel.connect(
+      Uri.parse('ws://localhost:8080/ws'),
     );
     channel.stream.listen(print);
   }
@@ -44,6 +45,10 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
       channel.sink.add('Hello increment!');
     });
+  }
+
+  void _sendIncrementCommand() {
+    channel.sink.add('increment');
   }
 
   @override
@@ -57,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'You have pushed the button this many times:',
+              'Full stack dart learning:',
             ),
             Text(
               '$_counter',
@@ -67,7 +72,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed:
+            // _incrementCounter
+            _sendIncrementCommand,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
